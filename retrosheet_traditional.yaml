@@ -1,0 +1,27 @@
+version: 1
+kind: job
+id: retrosheet_traditional
+source: retrosheet
+summary: Download Retrosheet traditional archives and land them in bronze.
+variables:
+  source_index_url: https://www.retrosheet.org/eventfile.htm
+  download_dir: ${DATA_ROOT}/downloads/retrosheet/traditional
+  extract_dir: ${DATA_ROOT}/bronze/retrosheet/traditional
+  bronze_schema: bronze_retrosheet
+steps:
+  - id: ensure_directories
+    action: ensure_directories
+    args:
+      paths:
+        - ${DATA_ROOT}/downloads/retrosheet/traditional
+        - ${DATA_ROOT}/bronze/retrosheet/traditional
+  - id: fetch_index
+    action: http_get
+    args:
+      url: https://www.retrosheet.org/eventfile.htm
+      save_as: retrosheet_event_index.html
+  - id: download_placeholder
+    action: log_message
+    args:
+      level: info
+      message: Runtime should parse approved Retrosheet links from the fetched page and download them deterministically.

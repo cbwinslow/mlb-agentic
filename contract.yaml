@@ -1,0 +1,17 @@
+version: 1
+kind: contract
+rules:
+  preserve_all_fields: true
+  preserve_all_rows: true
+  no_silent_skip: true
+  separate_sources: true
+  require_manifest: true
+  fail_on_partial_download: true
+  fail_on_unmapped_action: true
+  fail_on_schema_drift: true
+  transformations_after_bronze_only: true
+runtime:
+  stop_on_error: true
+  strict_validation: true
+  require_checksums: true
+  require_row_counts: true

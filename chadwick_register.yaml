@@ -1,0 +1,30 @@
+version: 1
+kind: job
+id: chadwick_register
+source: chadwick
+summary: Sync the Chadwick register repo and ingest people CSV files.
+variables:
+  repo_url: https://github.com/chadwickbureau/register
+  clone_dir: ${DATA_ROOT}/downloads/chadwick/register
+  bronze_dir: ${DATA_ROOT}/bronze/chadwick/register
+  bronze_schema: bronze_chadwick
+steps:
+  - id: ensure_directories
+    action: ensure_directories
+    args:
+      paths:
+        - ${DATA_ROOT}/downloads/chadwick
+        - ${DATA_ROOT}/bronze/chadwick/register
+  - id: git_sync
+    action: git_sync
+    args:
+      repo_url: https://github.com/chadwickbureau/register
+      destination_dir: ${DATA_ROOT}/downloads/chadwick/register
+      branch: main
+  - id: copy_people_files
+    action: copy_matching_files
+    args:
+      source_dir: ${DATA_ROOT}/downloads/chadwick/register/data
+      destination_dir: ${DATA_ROOT}/bronze/chadwick/register
+      include_globs:
+        - people-*.csv

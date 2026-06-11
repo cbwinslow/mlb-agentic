@@ -1,0 +1,50 @@
+{
+  "type": "function",
+  "function": {
+    "name": "run_mlb_bootstrap_jobs",
+    "description": "Request execution of approved MLB bootstrap jobs. The application validates the request, loads approved YAML job files, and executes deterministic local steps.",
+    "strict": true,
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["job_ids", "profile"],
+          "description": "Whether to run an explicit list of jobs or a named profile."
+        },
+        "job_ids": {
+          "type": "array",
+          "description": "Explicit approved job ids to execute when mode is job_ids.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "retrosheet_traditional",
+              "retrosheet_csv",
+              "chadwick_register",
+              "statcast_savant"
+            ]
+          }
+        },
+        "profile": {
+          "type": ["string", "null"],
+          "description": "Named approved bootstrap profile when mode is profile.",
+          "enum": [
+            "historical_foundation",
+            "historical_plus_statcast",
+            "full_bootstrap",
+            null
+          ]
+        },
+        "variables": {
+          "type": "object",
+          "description": "Runtime variable overrides such as DATA_ROOT, PROJECT_ROOT, POSTGRES_DSN, START_DATE, END_DATE.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": ["mode", "job_ids", "profile", "variables"]
+    }
+  }
+}

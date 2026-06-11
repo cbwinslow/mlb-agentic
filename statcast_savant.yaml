@@ -1,0 +1,30 @@
+version: 1
+kind: job
+id: statcast_savant
+source: statcast
+summary: Build date chunks for Statcast historical pulls and download approved chunk windows.
+variables:
+  download_dir: ${DATA_ROOT}/downloads/statcast
+  bronze_dir: ${DATA_ROOT}/bronze/statcast
+  bronze_schema: bronze_statcast
+  start_date: ${START_DATE}
+  end_date: ${END_DATE}
+  chunk_days: ${CHUNK_DAYS_STATCAST}
+steps:
+  - id: ensure_directories
+    action: ensure_directories
+    args:
+      paths:
+        - ${DATA_ROOT}/downloads/statcast
+        - ${DATA_ROOT}/bronze/statcast
+  - id: build_date_chunks
+    action: build_date_chunks
+    args:
+      start_date: ${START_DATE}
+      end_date: ${END_DATE}
+      chunk_days: ${CHUNK_DAYS_STATCAST}
+  - id: log_download_strategy
+    action: log_message
+    args:
+      level: info
+      message: Runtime should download Statcast data chunk by chunk using an approved adapter such as pybaseball or a Savant CSV downloader and preserve all columns.

@@ -1,0 +1,28 @@
+version: 1
+kind: manifest
+profiles:
+  historical_foundation:
+    description: Retrosheet plus Chadwick foundation set.
+    jobs:
+      - retrosheet_traditional
+      - retrosheet_csv
+      - chadwick_register
+  historical_plus_statcast:
+    description: Historical foundation plus chunked Statcast pull.
+    jobs:
+      - retrosheet_traditional
+      - retrosheet_csv
+      - chadwick_register
+      - statcast_savant
+  full_bootstrap:
+    description: Full approved bootstrap set including optional StatsAPI templates when configured.
+    jobs:
+      - retrosheet_traditional
+      - retrosheet_csv
+      - chadwick_register
+      - statcast_savant
+jobs:
+  retrosheet_traditional: ./config/jobs/retrosheet_traditional.yaml
+  retrosheet_csv: ./config/jobs/retrosheet_csv.yaml
+  chadwick_register: ./config/jobs/chadwick_register.yaml
+  statcast_savant: ./config/jobs/statcast_savant.yaml

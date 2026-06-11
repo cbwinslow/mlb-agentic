@@ -1,0 +1,27 @@
+version: 1
+kind: job
+id: retrosheet_csv
+source: retrosheet
+summary: Download Retrosheet CSV bundles and land them in bronze.
+variables:
+  source_index_url: https://www.retrosheet.org/downloads/csvdownloads.html
+  download_dir: ${DATA_ROOT}/downloads/retrosheet/csv
+  extract_dir: ${DATA_ROOT}/bronze/retrosheet/csv
+  bronze_schema: bronze_retrosheet
+steps:
+  - id: ensure_directories
+    action: ensure_directories
+    args:
+      paths:
+        - ${DATA_ROOT}/downloads/retrosheet/csv
+        - ${DATA_ROOT}/bronze/retrosheet/csv
+  - id: fetch_index
+    action: http_get
+    args:
+      url: https://www.retrosheet.org/downloads/csvdownloads.html
+      save_as: retrosheet_csv_index.html
+  - id: download_placeholder
+    action: log_message
+    args:
+      level: info
+      message: Runtime should parse approved Retrosheet CSV bundle links and process them deterministically.

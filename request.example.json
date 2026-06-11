@@ -1,0 +1,12 @@
+{
+  "mode": "profile",
+  "job_ids": [],
+  "profile": "historical_plus_statcast",
+  "variables": {
+    "DATA_ROOT": "/srv/mlb-data",
+    "PROJECT_ROOT": "/srv/mlb-baseball-ml",
+    "POSTGRES_DSN": "postgresql://user:pass@localhost:5432/mlb",
+    "START_DATE": "2015-01-01",
+    "END_DATE": "2026-12-31"
+  }
+}
