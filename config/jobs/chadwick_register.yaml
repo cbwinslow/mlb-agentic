@@ -1,0 +1,37 @@
+version: 1
+kind: job
+id: chadwick_register
+source: chadwick
+summary: Sync Chadwick Bureau register repo and ingest people files to bronze.
+variables:
+  clone_dir: ${DATA_ROOT}/downloads/chadwick/register
+  bronze_dir: ${DATA_ROOT}/bronze/chadwick/register
+  bronze_schema: bronze_chadwick
+steps:
+  - id: ensure_directories
+    action: ensure_directories
+    args:
+      paths:
+        - ${DATA_ROOT}/downloads/chadwick
+        - ${DATA_ROOT}/bronze/chadwick/register
+
+  - id: sync_repo
+    action: chadwick_sync
+    args:
+      clone_dir: ${DATA_ROOT}/downloads/chadwick/register
+
+  - id: copy_people_files
+    action: chadwick_copy_people
+    args:
+      clone_dir: ${DATA_ROOT}/downloads/chadwick/register
+      bronze_dir: ${DATA_ROOT}/bronze/chadwick/register
+
+  - id: ingest_to_bronze
+    action: ingest_directory_to_bronze
+    args:
+      directory: ${DATA_ROOT}/bronze/chadwick/register
+      schema_name: bronze_chadwick
+      table_name: people_raw
+      source: chadwick_register
+      file_pattern: "people-*.csv"
+      postgres_dsn: ${POSTGRES_DSN}

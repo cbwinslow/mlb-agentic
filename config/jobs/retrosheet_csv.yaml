@@ -1,0 +1,29 @@
+version: 1
+kind: job
+id: retrosheet_csv
+source: retrosheet
+summary: Download Retrosheet processed CSV bundles and ingest to bronze.
+variables:
+  download_dir: ${DATA_ROOT}/downloads/retrosheet/csv
+  bronze_schema: bronze_retrosheet
+steps:
+  - id: ensure_directories
+    action: ensure_directories
+    args:
+      paths:
+        - ${DATA_ROOT}/downloads/retrosheet/csv
+
+  - id: download_csv_bundles
+    action: retrosheet_download_csv
+    args:
+      download_dir: ${DATA_ROOT}/downloads/retrosheet/csv
+
+  - id: ingest_to_bronze
+    action: ingest_directory_to_bronze
+    args:
+      directory: ${DATA_ROOT}/downloads/retrosheet/csv
+      schema_name: bronze_retrosheet
+      table_name: games_csv_raw
+      source: retrosheet_csv
+      file_pattern: "*.csv"
+      postgres_dsn: ${POSTGRES_DSN}

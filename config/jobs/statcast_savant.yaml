@@ -1,0 +1,33 @@
+version: 1
+kind: job
+id: statcast_savant
+source: statcast
+summary: Download Statcast data by date chunks via pybaseball and ingest to bronze.
+variables:
+  download_dir: ${DATA_ROOT}/downloads/statcast
+  bronze_schema: bronze_statcast
+steps:
+  - id: ensure_directories
+    action: ensure_directories
+    args:
+      paths:
+        - ${DATA_ROOT}/downloads/statcast
+        - ${DATA_ROOT}/bronze/statcast
+
+  - id: download_statcast
+    action: statcast_download_range
+    args:
+      start_date: ${START_DATE}
+      end_date: ${END_DATE}
+      download_dir: ${DATA_ROOT}/downloads/statcast
+      chunk_days: ${CHUNK_DAYS_STATCAST}
+
+  - id: ingest_to_bronze
+    action: ingest_directory_to_bronze
+    args:
+      directory: ${DATA_ROOT}/downloads/statcast
+      schema_name: bronze_statcast
+      table_name: pitches_raw
+      source: statcast_savant
+      file_pattern: "*.parquet"
+      postgres_dsn: ${POSTGRES_DSN}

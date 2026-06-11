@@ -1,14 +1,23 @@
 [project]
 name = "mlb-agent-bootstrap"
-version = "0.1.0"
+version = "0.2.0"
 description = "Deterministic MLB data bootstrap runtime for AI agents"
 requires-python = ">=3.11"
 dependencies = [
   "pydantic>=2.7",
   "pyyaml>=6.0",
   "requests>=2.32",
-  "typer>=0.12"
+  "typer>=0.12",
+  "psycopg2-binary>=2.9",
+  "pandas>=2.2",
+  "pyarrow>=16.0",
+  "pybaseball>=2.2",
+  "langchain>=0.3",
+  "langchain-openai>=0.2",
 ]
 
 [project.scripts]
 mlb-bootstrap = "mlb_agent_bootstrap.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
